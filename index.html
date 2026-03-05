@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Vendor Comparison Table</title>
+  <style>
+    /* Basic page styling */
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 24px;
+      line-height: 1.45;
+      color: #111;
+      background: #f7f8fa;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+
+    .table-wrap {
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(18, 24, 32, 0.06);
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px; /* allow horizontal scroll on small screens */
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f1f5f9;
+      text-align: left;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e6e9ef;
+      cursor: pointer; /* clickable for sorting */
+      user-select: none;
+    }
+
+    thead th:focus {
+      outline: 3px solid #cfe6ff;
+      outline-offset: 2px;
+    }
+
+    tbody td {
+      padding: 10px 12px;
+      vertical-align: top;
+      border-bottom: 1px solid #f0f2f6;
+      font-size: 0.95rem;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fbfcfd;
+    }
+
+    /* small visual cue for sort direction */
+    .sort-indicator {
+      margin-left: 8px;
+      font-size: 0.85rem;
+      color: #667085;
+    }
+
+    /* make long cells more readable */
+    td p {
+      margin: 0;
+    }
+
+    /* small badges for confidence */
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #fff;
+    }
+    .badge--high { background: #2b8a3e; }
+    .badge--med { background: #d97706; } /* medium/med-high */
+    .badge--medium { background: #6b7280; }
+
+    /* responsive: reduce padding on narrow screens */
+    @media (max-width: 720px) {
+      body { margin: 12px; }
+      thead th, tbody td { padding: 8px; font-size: 0.88rem; }
+    }
+  </style>
+</head>
+<body>
+  <h1>AI Vendor Comparison</h1>
+  <div class="table-wrap" role="region" aria-label="AI vendor comparison table">
+    <table id="vendorTable" aria-describedby="tableDesc">
+      <caption id="tableDesc" style="text-align:left; padding:8px 12px; font-size:0.95rem;">
+        Summary of vendors, strengths, recommended tasks, watch-outs, performance ratings (1–5) and confidence.
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col" data-type="text">Vendor (platform)<span class="sort-indicator" aria-hidden="true"></span></th>
+          <th scope="col" data-type="text">Noted for (strengths)<span class="sort-indicator" aria-hidden="true"></span></th>
+          <th scope="col" data-type="text">Better for (tasks)<span class="sort-indicator" aria-hidden="true"></span></th>
+          <th scope="col" data-type="text">Watch-outs / limitations<span class="sort-indicator" aria-hidden="true"></span></th>
+          <th scope="col" data-type="number">Core Model Performance (1–5)<span class="sort-indicator" aria-hidden="true"></span></th>
+          <th scope="col" data-type="number">Practical Use (1–5)<span class="sort-indicator" aria-hidden="true"></span></th>
+          <th scope="col" data-type="number">Specialty Strengths (1–5)<span class="sort-indicator" aria-hidden="true"></span></th>
+          <th scope="col" data-type="text">Confidence<span class="sort-indicator" aria-hidden="true"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- OpenAI -->
+        <tr>
+          <td>OpenAI (ChatGPT / OpenAI platform)</td>
+          <td>Strong generalist; deep research workflows; unified flagship default</td>
+          <td>Professional writing, coding help, tool-augmented research, mixed media & files</td>
+          <td>Plan tiers vary; outputs can hallucinate without verification; rapidly changing model lineup</td>
+          <td data-sort="5">5</td>
+          <td data-sort="5">5</td>
+          <td data-sort="4">4</td>
+          <td><span class="badge badge--med">Med–High (OpenAI Help Center)</span></td>
+        </tr>
+
+        <!-- Anthropic -->
+        <tr>
+          <td>Anthropic (Claude)</td>
+          <td>Careful reasoning; very long context; strong codebase workflows</td>
+          <td>Long documents, policy-heavy writing, deep coding/debugging, sustained agentic tasks</td>
+          <td>Tooling breadth varies vs ChatGPT; occasional strict refusals; security/tooling incidents can affect trust</td>
+          <td data-sort="5">5</td>
+          <td data-sort="4">4</td>
+          <td data-sort="5">5</td>
+          <td><span class="badge badge--med">Med–High (Anthropic)</span></td>
+        </tr>
+
+        <!-- Google -->
+        <tr>
+          <td>Google (Gemini)</td>
+          <td>Google ecosystem; strong multimodal stack; enterprise deployment options</td>
+          <td>Google-native workflows, multimodal tasks, dev/enterprise integration (AI Studio / Vertex)</td>
+          <td>UX/model naming shifts; consistency can vary across tiers (Flash/Pro)</td>
+          <td data-sort="4">4</td>
+          <td data-sort="4">4</td>
+          <td data-sort="5">5</td>
+          <td><span class="badge badge--medium">Medium (Google Developers Blog)</span></td>
+        </tr>
+
+        <!-- Perplexity -->
+        <tr>
+          <td>Perplexity</td>
+          <td>Web-grounded answers with citations; "answer engine" feel</td>
+          <td>Real-time web Q&amp;A, quick research briefs, source-backed summaries</td>
+          <td>Not always best for creative writing or complex coding; quality depends on web sources</td>
+          <td data-sort="3">3</td>
+          <td data-sort="4">4</td>
+          <td data-sort="5">5</td>
+          <td><span class="badge badge--med">Med–High (Perplexity)</span></td>
+        </tr>
+
+        <!-- xAI -->
+        <tr>
+          <td>xAI (Grok)</td>
+          <td>Reasoning-focused positioning; close ties to X/Twitter ecosystem</td>
+          <td>Fast takes, some coding/reasoning tasks, X-native workflows</td>
+          <td>Higher variance in safety/reliability perception; enterprise/government concerns reported</td>
+          <td data-sort="4">4</td>
+          <td data-sort="3">3</td>
+          <td data-sort="3">3</td>
+          <td><span class="badge badge--medium">Medium (xAI)</span></td>
+        </tr>
+
+        <!-- ElevenLabs -->
+        <tr>
+          <td>ElevenLabs (voice / audio only)</td>
+          <td>High-quality TTS and low-latency voice API</td>
+          <td>Voiceovers, narration, character voices, TTS in apps</td>
+          <td>Not for text LLM tasks; route only audio/voice use cases here</td>
+          <td data-sort="">—</td>
+          <td data-sort="">—</td>
+          <td data-sort="5">5 (audio)</td>
+          <td><span class="badge badge--high">High (ElevenLabs)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Simple table sorting for the table above.
+    // Click any header to toggle sort. Numeric and text columns supported.
+    (function () {
+      const table = document.getElementById('vendorTable');
+      const headers = table.querySelectorAll('thead th');
+      const tbody = table.querySelector('tbody');
+
+      // Helper to get cell value; uses data-sort if present for accurate numeric sorting
+      function getCellValue(row, idx) {
+        const cell = row.children[idx];
+        const ds = cell.getAttribute('data-sort');
+        if (ds !== null && ds !== '') return ds;
+        // fallback to textContent trimmed
+        return cell.textContent.trim();
+      }
+
+      function compareValues(a, b, type) {
+        // handle empty/em-dash as lowest
+        const emptyTokens = ['', '—', '-', '–', '—'];
+        if (emptyTokens.includes(a)) a = null;
+        if (emptyTokens.includes(b)) b = null;
+
+        if (a === null && b === null) return 0;
+        if (a === null) return 1; // put empties last
+        if (b === null) return -1;
+
+        if (type === 'number') {
+          // try numeric compare
+          const na = parseFloat(a);
+          const nb = parseFloat(b);
+          if (!isNaN(na) && !isNaN(nb)) return na - nb;
+          // fallback to text compare
+        }
+        // case-insensitive string compare
+        return a.toString().localeCompare(b.toString(), undefined, { numeric: true, sensitivity: 'base' });
+      }
+
+      headers.forEach((header, idx) => {
+        header.addEventListener('click', function () {
+          const current = header.getAttribute('data-sort-dir') || 'none';
+          // reset indicators
+          headers.forEach(h => {
+            h.setAttribute('data-sort-dir', 'none');
+            const ind = h.querySelector('.sort-indicator');
+            if (ind) ind.textContent = '';
+          });
+
+          // determine new sort direction
+          const dir = current === 'asc' ? 'desc' : 'asc';
+          header.setAttribute('data-sort-dir', dir);
+          const indicator = header.querySelector('.sort-indicator');
+          if (indicator) indicator.textContent = dir === 'asc' ? '▲' : '▼';
+
+          const type = header.getAttribute('data-type') || 'text';
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+
+          rows.sort((r1, r2) => {
+            const v1 = getCellValue(r1, idx);
+            const v2 = getCellValue(r2, idx);
+            const cmp = compareValues(v1, v2, type);
+            return (dir === 'asc') ? cmp : -cmp;
+          });
+
+          // re-append rows in sorted order
+          rows.forEach(r => tbody.appendChild(r));
+        });
+
+        // keyboard accessibility: Enter or Space to sort
+        header.setAttribute('tabindex', '0');
+        header.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            header.click();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
