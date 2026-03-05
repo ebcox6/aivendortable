@@ -3,268 +3,520 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Vendor Comparison Table</title>
+  <title>AI Vendor Comparison — Enhanced</title>
+
+  <!-- Optional: modern system font stack -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Basic page styling */
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      margin: 24px;
-      line-height: 1.45;
-      color: #111;
-      background: #f7f8fa;
+    :root{
+      --bg:#f3f6fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#3751ff;
+      --success:#16a34a;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --glass: rgba(255,255,255,0.7);
+      --radius:12px;
+      --shadow: 0 6px 20px rgba(16,24,40,0.08);
+      --table-header-bg: linear-gradient(90deg,#f8fafc,#eef2ff);
     }
 
-    h1 {
-      font-size: 1.25rem;
-      margin-bottom: 12px;
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 40%);
+      color: #0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    .table-wrap {
-      background: #fff;
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: 0 1px 4px rgba(18, 24, 32, 0.06);
-      overflow: auto;
+    .container{
+      max-width:1200px;
+      margin:28px auto;
+      padding:20px;
     }
 
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    header h1{
+      margin:0;
+      font-size:1.25rem;
+      font-weight:700;
+      letter-spacing:-0.2px;
+    }
+
+    header p {
+      margin:0;
+      color:var(--muted);
+      font-size:0.95rem;
+    }
+
+    .controls {
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .control-btn {
+      background:var(--card);
+      border:1px solid rgba(15,23,42,0.06);
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:0.89rem;
+      color:var(--muted);
+      box-shadow: 0 2px 6px rgba(11,15,30,0.04);
+    }
+    .control-btn:hover{ transform:translateY(-1px); }
+
+    /* Table wrapper card */
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.95));
+      border-radius: var(--radius);
+      padding:12px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(15,23,42,0.03);
+      overflow:auto;
+    }
+
+    /* Table styles */
     table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 900px; /* allow horizontal scroll on small screens */
+      width:100%;
+      min-width:980px;
+      border-collapse:collapse;
+      font-size:0.95rem;
     }
 
     thead th {
       position: sticky;
-      top: 0;
-      background: #f1f5f9;
-      text-align: left;
-      font-weight: 600;
-      padding: 10px 12px;
-      border-bottom: 1px solid #e6e9ef;
-      cursor: pointer; /* clickable for sorting */
-      user-select: none;
+      top:0;
+      background:var(--table-header-bg);
+      padding:12px 14px;
+      text-align:left;
+      font-weight:600;
+      color:#0b1220;
+      border-bottom:1px solid rgba(11,15,30,0.06);
+      vertical-align:bottom;
+      cursor:pointer;
+      user-select:none;
     }
 
-    thead th:focus {
-      outline: 3px solid #cfe6ff;
-      outline-offset: 2px;
+    thead th .col-title{
+      display:inline-block;
+      vertical-align:middle;
+    }
+
+    thead th .sort-ind {
+      margin-left:8px;
+      color:var(--muted);
+      font-size:0.82rem;
+      vertical-align:middle;
     }
 
     tbody td {
-      padding: 10px 12px;
-      vertical-align: top;
-      border-bottom: 1px solid #f0f2f6;
-      font-size: 0.95rem;
+      padding:14px;
+      vertical-align:top;
+      border-bottom:1px solid rgba(15,23,42,0.03);
     }
 
-    tbody tr:nth-child(even) {
-      background: #fbfcfd;
+    tbody tr:hover{
+      background: linear-gradient(90deg, rgba(51,65,85,0.02), rgba(99,102,241,0.02));
+      transform: translateZ(0);
     }
 
-    /* small visual cue for sort direction */
-    .sort-indicator {
-      margin-left: 8px;
-      font-size: 0.85rem;
-      color: #667085;
+    /* Vendor column: bolder */
+    .vendor {
+      font-weight:700;
+      color:#071133;
     }
 
-    /* make long cells more readable */
-    td p {
-      margin: 0;
+    .muted {
+      color:var(--muted);
+      font-size:0.92rem;
     }
 
-    /* small badges for confidence */
+    /* Badge styles */
     .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      color: #fff;
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:0.82rem;
+      color:#fff;
     }
-    .badge--high { background: #2b8a3e; }
-    .badge--med { background: #d97706; } /* medium/med-high */
-    .badge--medium { background: #6b7280; }
+    .badge--high { background:var(--success); }
+    .badge--med { background:var(--warning); }
+    .badge--medium { background:#6b7280; }
 
-    /* responsive: reduce padding on narrow screens */
-    @media (max-width: 720px) {
-      body { margin: 12px; }
-      thead th, tbody td { padding: 8px; font-size: 0.88rem; }
+    /* Rating stars / bars */
+    .rating {
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+    }
+    .stars {
+      display:inline-flex;
+      gap:4px;
+      align-items:center;
+    }
+    .star {
+      width:16px;
+      height:16px;
+      display:inline-block;
+      background:linear-gradient(90deg,#e6e9ef,#f8fafc);
+      border-radius:3px;
+      position:relative;
+      overflow:hidden;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+    }
+    .star svg { width:100%; height:100%; display:block; transform:translateY(1px); }
+
+    /* Filled portion */
+    .star-fill {
+      position:absolute;
+      top:0;
+      left:0;
+      height:100%;
+      width:0%;
+      overflow:hidden;
+    }
+    .star-fill svg { filter: drop-shadow(0 1px 0 rgba(0,0,0,0.06)); }
+
+    .rating-value {
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-left:8px;
+      min-width:26px;
+      text-align:right;
+    }
+
+    /* Small note caption */
+    .caption {
+      margin-top:10px;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+
+    /* Responsive: card layout for small screens */
+    @media (max-width:920px) {
+      table { min-width:100%; border: none; }
+      thead { display:none; }
+      tbody td {
+        display:block;
+        padding:12px;
+        border-bottom:1px solid rgba(11,15,30,0.03);
+      }
+      tbody tr {
+        display:block;
+        margin-bottom:12px;
+        border-radius:10px;
+        background:linear-gradient(180deg,#ffffff,#fbfdff);
+        box-shadow: 0 6px 18px rgba(8,15,35,0.04);
+        overflow:hidden;
+      }
+      /* field label shown before content */
+      tbody td::before {
+        content: attr(data-label);
+        display:block;
+        font-size:0.82rem;
+        color:var(--muted);
+        margin-bottom:6px;
+        font-weight:600;
+      }
+      tbody td .rating-value { float:right; margin-left:0; }
     }
   </style>
 </head>
 <body>
-  <h1>AI Vendor Comparison</h1>
-  <div class="table-wrap" role="region" aria-label="AI vendor comparison table">
-    <table id="vendorTable" aria-describedby="tableDesc">
-      <caption id="tableDesc" style="text-align:left; padding:8px 12px; font-size:0.95rem;">
-        Summary of vendors, strengths, recommended tasks, watch-outs, performance ratings (1–5) and confidence.
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col" data-type="text">Vendor (platform)<span class="sort-indicator" aria-hidden="true"></span></th>
-          <th scope="col" data-type="text">Noted for (strengths)<span class="sort-indicator" aria-hidden="true"></span></th>
-          <th scope="col" data-type="text">Better for (tasks)<span class="sort-indicator" aria-hidden="true"></span></th>
-          <th scope="col" data-type="text">Watch-outs / limitations<span class="sort-indicator" aria-hidden="true"></span></th>
-          <th scope="col" data-type="number">Core Model Performance (1–5)<span class="sort-indicator" aria-hidden="true"></span></th>
-          <th scope="col" data-type="number">Practical Use (1–5)<span class="sort-indicator" aria-hidden="true"></span></th>
-          <th scope="col" data-type="number">Specialty Strengths (1–5)<span class="sort-indicator" aria-hidden="true"></span></th>
-          <th scope="col" data-type="text">Confidence<span class="sort-indicator" aria-hidden="true"></span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- OpenAI -->
-        <tr>
-          <td>OpenAI (ChatGPT / OpenAI platform)</td>
-          <td>Strong generalist; deep research workflows; unified flagship default</td>
-          <td>Professional writing, coding help, tool-augmented research, mixed media & files</td>
-          <td>Plan tiers vary; outputs can hallucinate without verification; rapidly changing model lineup</td>
-          <td data-sort="5">5</td>
-          <td data-sort="5">5</td>
-          <td data-sort="4">4</td>
-          <td><span class="badge badge--med">Med–High (OpenAI Help Center)</span></td>
-        </tr>
+  <div class="container">
+    <header>
+      <div>
+        <h1>AI Vendor Comparison</h1>
+        <p>Quick reference: strengths, recommended tasks, watch-outs, and ratings (1–5).</p>
+      </div>
+      <div class="controls" role="group" aria-label="Table controls">
+        <button class="control-btn" id="resetSort" title="Reset sorting">Reset sort</button>
+        <button class="control-btn" id="toggleCompact" title="Toggle compact card view">Toggle compact</button>
+      </div>
+    </header>
 
-        <!-- Anthropic -->
-        <tr>
-          <td>Anthropic (Claude)</td>
-          <td>Careful reasoning; very long context; strong codebase workflows</td>
-          <td>Long documents, policy-heavy writing, deep coding/debugging, sustained agentic tasks</td>
-          <td>Tooling breadth varies vs ChatGPT; occasional strict refusals; security/tooling incidents can affect trust</td>
-          <td data-sort="5">5</td>
-          <td data-sort="4">4</td>
-          <td data-sort="5">5</td>
-          <td><span class="badge badge--med">Med–High (Anthropic)</span></td>
-        </tr>
+    <section class="card" aria-labelledby="tableTitle">
+      <table id="vendorTable" aria-describedby="tableDesc">
+        <caption id="tableDesc" style="text-align:left; padding:8px 0; font-size:0.95rem;">
+          Vendors, strengths, recommended tasks, watch-outs, scores and confidence.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" data-type="text">Vendor (platform) <span class="sort-ind"></span></th>
+            <th scope="col" data-type="text">Noted for (strengths) <span class="sort-ind"></span></th>
+            <th scope="col" data-type="text">Better for (tasks) <span class="sort-ind"></span></th>
+            <th scope="col" data-type="text">Watch-outs / limitations <span class="sort-ind"></span></th>
+            <th scope="col" data-type="number">Core Model<br>Performance (1–5) <span class="sort-ind"></span></th>
+            <th scope="col" data-type="number">Practical Use<br>(1–5) <span class="sort-ind"></span></th>
+            <th scope="col" data-type="number">Specialty Strengths<br>(1–5) <span class="sort-ind"></span></th>
+            <th scope="col" data-type="text">Confidence <span class="sort-ind"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- OpenAI -->
+          <tr>
+            <td class="vendor" data-label="Vendor">OpenAI (ChatGPT / OpenAI platform)</td>
+            <td data-label="Noted for">Strong generalist; “deep research” workflow; unified flagship default</td>
+            <td data-label="Better for">Professional writing, coding help, tool-augmented research, mixed media & files</td>
+            <td data-label="Watch-outs">Plan tiers vary; outputs can hallucinate without verification; fast-moving model lineup</td>
+            <td data-label="Core Model Performance" data-sort="5">
+              <div class="rating" title="5 / 5">
+                <div class="stars" data-score="5"></div>
+                <div class="rating-value">5</div>
+              </div>
+            </td>
+            <td data-label="Practical Use" data-sort="5">
+              <div class="rating" title="5 / 5">
+                <div class="stars" data-score="5"></div>
+                <div class="rating-value">5</div>
+              </div>
+            </td>
+            <td data-label="Specialty Strengths" data-sort="4">
+              <div class="rating" title="4 / 5">
+                <div class="stars" data-score="4"></div>
+                <div class="rating-value">4</div>
+              </div>
+            </td>
+            <td data-label="Confidence"><span class="badge badge--med">Med–High (OpenAI Help Center)</span></td>
+          </tr>
 
-        <!-- Google -->
-        <tr>
-          <td>Google (Gemini)</td>
-          <td>Google ecosystem; strong multimodal stack; enterprise deployment options</td>
-          <td>Google-native workflows, multimodal tasks, dev/enterprise integration (AI Studio / Vertex)</td>
-          <td>UX/model naming shifts; consistency can vary across tiers (Flash/Pro)</td>
-          <td data-sort="4">4</td>
-          <td data-sort="4">4</td>
-          <td data-sort="5">5</td>
-          <td><span class="badge badge--medium">Medium (Google Developers Blog)</span></td>
-        </tr>
+          <!-- Anthropic -->
+          <tr>
+            <td class="vendor" data-label="Vendor">Anthropic (Claude)</td>
+            <td data-label="Noted for">Careful reasoning; very long context; strong codebase workflows</td>
+            <td data-label="Better for">Long docs, policy-heavy writing, deep coding/debugging, sustained agentic tasks</td>
+            <td data-label="Watch-outs">Tooling breadth varies vs ChatGPT; occasional strict refusals; security/tooling incidents can affect trust</td>
+            <td data-label="Core Model Performance" data-sort="5">
+              <div class="rating"><div class="stars" data-score="5"></div><div class="rating-value">5</div></div>
+            </td>
+            <td data-label="Practical Use" data-sort="4">
+              <div class="rating"><div class="stars" data-score="4"></div><div class="rating-value">4</div></div>
+            </td>
+            <td data-label="Specialty Strengths" data-sort="5">
+              <div class="rating"><div class="stars" data-score="5"></div><div class="rating-value">5</div></div>
+            </td>
+            <td data-label="Confidence"><span class="badge badge--med">Med–High (Anthropic)</span></td>
+          </tr>
 
-        <!-- Perplexity -->
-        <tr>
-          <td>Perplexity</td>
-          <td>Web-grounded answers with citations; "answer engine" feel</td>
-          <td>Real-time web Q&amp;A, quick research briefs, source-backed summaries</td>
-          <td>Not always best for creative writing or complex coding; quality depends on web sources</td>
-          <td data-sort="3">3</td>
-          <td data-sort="4">4</td>
-          <td data-sort="5">5</td>
-          <td><span class="badge badge--med">Med–High (Perplexity)</span></td>
-        </tr>
+          <!-- Google -->
+          <tr>
+            <td class="vendor" data-label="Vendor">Google (Gemini)</td>
+            <td data-label="Noted for">Google ecosystem; strong multimodal stack; enterprise deployment</td>
+            <td data-label="Better for">Google-native workflows, multimodal tasks, dev/enterprise integration (AI Studio/Vertex)</td>
+            <td data-label="Watch-outs">UX/model naming shifts; consistency can vary across tiers (Flash/Pro)</td>
+            <td data-label="Core Model Performance" data-sort="4">
+              <div class="rating"><div class="stars" data-score="4"></div><div class="rating-value">4</div></div>
+            </td>
+            <td data-label="Practical Use" data-sort="4">
+              <div class="rating"><div class="stars" data-score="4"></div><div class="rating-value">4</div></div>
+            </td>
+            <td data-label="Specialty Strengths" data-sort="5">
+              <div class="rating"><div class="stars" data-score="5"></div><div class="rating-value">5</div></div>
+            </td>
+            <td data-label="Confidence"><span class="badge badge--medium">Medium (Google Developers Blog)</span></td>
+          </tr>
 
-        <!-- xAI -->
-        <tr>
-          <td>xAI (Grok)</td>
-          <td>Reasoning-focused positioning; close ties to X/Twitter ecosystem</td>
-          <td>Fast takes, some coding/reasoning tasks, X-native workflows</td>
-          <td>Higher variance in safety/reliability perception; enterprise/government concerns reported</td>
-          <td data-sort="4">4</td>
-          <td data-sort="3">3</td>
-          <td data-sort="3">3</td>
-          <td><span class="badge badge--medium">Medium (xAI)</span></td>
-        </tr>
+          <!-- Perplexity -->
+          <tr>
+            <td class="vendor" data-label="Vendor">Perplexity</td>
+            <td data-label="Noted for">Web-grounded answers with citations; “answer engine” feel</td>
+            <td data-label="Better for">Real-time web Q&amp;A, quick research briefs, source-backed summaries</td>
+            <td data-label="Watch-outs">Not always best for creative writing or complex coding; depends on web sources quality</td>
+            <td data-label="Core Model Performance" data-sort="3">
+              <div class="rating"><div class="stars" data-score="3"></div><div class="rating-value">3</div></div>
+            </td>
+            <td data-label="Practical Use" data-sort="4">
+              <div class="rating"><div class="stars" data-score="4"></div><div class="rating-value">4</div></div>
+            </td>
+            <td data-label="Specialty Strengths" data-sort="5">
+              <div class="rating"><div class="stars" data-score="5"></div><div class="rating-value">5</div></div>
+            </td>
+            <td data-label="Confidence"><span class="badge badge--med">Med–High (Perplexity)</span></td>
+          </tr>
 
-        <!-- ElevenLabs -->
-        <tr>
-          <td>ElevenLabs (voice / audio only)</td>
-          <td>High-quality TTS and low-latency voice API</td>
-          <td>Voiceovers, narration, character voices, TTS in apps</td>
-          <td>Not for text LLM tasks; route only audio/voice use cases here</td>
-          <td data-sort="">—</td>
-          <td data-sort="">—</td>
-          <td data-sort="5">5 (audio)</td>
-          <td><span class="badge badge--high">High (ElevenLabs)</span></td>
-        </tr>
-      </tbody>
-    </table>
+          <!-- xAI -->
+          <tr>
+            <td class="vendor" data-label="Vendor">xAI (Grok)</td>
+            <td data-label="Noted for">Reasoning-focused positioning; close ties to X/Twitter ecosystem</td>
+            <td data-label="Better for">Fast takes, some coding/reasoning tasks, X-native workflows</td>
+            <td data-label="Watch-outs">Higher variance in safety/reliability perception; enterprise/government concerns reported</td>
+            <td data-label="Core Model Performance" data-sort="4">
+              <div class="rating"><div class="stars" data-score="4"></div><div class="rating-value">4</div></div>
+            </td>
+            <td data-label="Practical Use" data-sort="3">
+              <div class="rating"><div class="stars" data-score="3"></div><div class="rating-value">3</div></div>
+            </td>
+            <td data-label="Specialty Strengths" data-sort="3">
+              <div class="rating"><div class="stars" data-score="3"></div><div class="rating-value">3</div></div>
+            </td>
+            <td data-label="Confidence"><span class="badge badge--medium">Medium (xAI)</span></td>
+          </tr>
+
+          <!-- ElevenLabs -->
+          <tr>
+            <td class="vendor" data-label="Vendor">ElevenLabs (voice / audio only)</td>
+            <td data-label="Noted for">High-quality TTS and low-latency voice API</td>
+            <td data-label="Better for">Voiceovers, narration, character voices, TTS in apps</td>
+            <td data-label="Watch-outs">Not for text LLM tasks; route only audio/voice here</td>
+            <td data-label="Core Model Performance" data-sort="">
+              <div class="muted">—</div>
+            </td>
+            <td data-label="Practical Use" data-sort="">
+              <div class="muted">—</div>
+            </td>
+            <td data-label="Specialty Strengths" data-sort="5">
+              <div class="rating"><div class="stars" data-score="5"></div><div class="rating-value">5 (audio)</div></div>
+            </td>
+            <td data-label="Confidence"><span class="badge badge--high">High (ElevenLabs)</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <div class="caption">
+        Tip: click any column header to sort. On small screens, each vendor appears as a card for easier scanning.
+      </div>
+    </section>
   </div>
 
   <script>
-    // Simple table sorting for the table above.
-    // Click any header to toggle sort. Numeric and text columns supported.
-    (function () {
+    // --- Render star-based ratings and set color fills ---
+    (function renderStars(){
+      // star SVG paths (fillable)
+      const starSVG = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.784 1.402 8.169L12 18.896 4.664 23.164l1.402-8.169L.132 9.211l8.2-1.193z"/></svg>';
+      const starContainers = document.querySelectorAll('.stars');
+
+      starContainers.forEach(container => {
+        const scoreRaw = container.getAttribute('data-score') || '0';
+        const score = Math.max(0, Math.min(5, Number(scoreRaw) || 0));
+        container.innerHTML = ''; // clear placeholder
+
+        for(let i=1;i<=5;i++){
+          // create star wrapper
+          const starWrap = document.createElement('span');
+          starWrap.className = 'star';
+          // front fill (colored portion)
+          const fill = document.createElement('span');
+          fill.className = 'star-fill';
+          // compute fill percent for this star (100% if i <= score, partial if within)
+          let percent = 0;
+          if (i <= Math.floor(score)) percent = 100;
+          else if (i - 1 < score && i > score) percent = Math.round((score - (i - 1)) * 100);
+          // clamp
+          percent = Math.max(0, Math.min(100, percent));
+          fill.style.width = percent + '%';
+          // active color for filled portion
+          fill.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ffb020" d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.784 1.402 8.169L12 18.896 4.664 23.164l1.402-8.169L.132 9.211l8.2-1.193z"/></svg>';
+          // base (outline/empty) star behind
+          starWrap.innerHTML = starSVG;
+          starWrap.appendChild(fill);
+          container.appendChild(starWrap);
+        }
+      });
+    })();
+
+    // --- Table sorting (click header) ---
+    (function tableSorting(){
       const table = document.getElementById('vendorTable');
       const headers = table.querySelectorAll('thead th');
       const tbody = table.querySelector('tbody');
 
-      // Helper to get cell value; uses data-sort if present for accurate numeric sorting
-      function getCellValue(row, idx) {
+      function getCellValue(row, idx){
         const cell = row.children[idx];
         const ds = cell.getAttribute('data-sort');
         if (ds !== null && ds !== '') return ds;
-        // fallback to textContent trimmed
+        // fallback: numeric in rating-value or plain text
+        const rv = cell.querySelector('.rating-value');
+        if (rv) return rv.textContent.trim().split(' ')[0]; // take leading numeric if any
         return cell.textContent.trim();
       }
 
-      function compareValues(a, b, type) {
-        // handle empty/em-dash as lowest
-        const emptyTokens = ['', '—', '-', '–', '—'];
+      function compare(a,b,type){
+        const emptyTokens = ['', '—', '-', '–', '—', '—'];
         if (emptyTokens.includes(a)) a = null;
         if (emptyTokens.includes(b)) b = null;
-
         if (a === null && b === null) return 0;
-        if (a === null) return 1; // put empties last
+        if (a === null) return 1;
         if (b === null) return -1;
 
-        if (type === 'number') {
-          // try numeric compare
+        if (type === 'number'){
           const na = parseFloat(a);
           const nb = parseFloat(b);
           if (!isNaN(na) && !isNaN(nb)) return na - nb;
-          // fallback to text compare
         }
-        // case-insensitive string compare
-        return a.toString().localeCompare(b.toString(), undefined, { numeric: true, sensitivity: 'base' });
+        // default locale-aware compare
+        return a.toString().localeCompare(b.toString(), undefined, {numeric:true, sensitivity:'base'});
       }
 
-      headers.forEach((header, idx) => {
-        header.addEventListener('click', function () {
-          const current = header.getAttribute('data-sort-dir') || 'none';
-          // reset indicators
-          headers.forEach(h => {
-            h.setAttribute('data-sort-dir', 'none');
-            const ind = h.querySelector('.sort-indicator');
-            if (ind) ind.textContent = '';
-          });
-
-          // determine new sort direction
-          const dir = current === 'asc' ? 'desc' : 'asc';
-          header.setAttribute('data-sort-dir', dir);
-          const indicator = header.querySelector('.sort-indicator');
-          if (indicator) indicator.textContent = dir === 'asc' ? '▲' : '▼';
-
-          const type = header.getAttribute('data-type') || 'text';
-          const rows = Array.from(tbody.querySelectorAll('tr'));
-
-          rows.sort((r1, r2) => {
-            const v1 = getCellValue(r1, idx);
-            const v2 = getCellValue(r2, idx);
-            const cmp = compareValues(v1, v2, type);
-            return (dir === 'asc') ? cmp : -cmp;
-          });
-
-          // re-append rows in sorted order
-          rows.forEach(r => tbody.appendChild(r));
-        });
-
-        // keyboard accessibility: Enter or Space to sort
-        header.setAttribute('tabindex', '0');
-        header.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            header.click();
-          }
+      headers.forEach((th, idx) => {
+        th.style.userSelect = 'none';
+        th.tabIndex = 0;
+        th.addEventListener('click', () => sortBy(th, idx));
+        th.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sortBy(th, idx); }
         });
       });
+
+      function clearIndicators(){
+        headers.forEach(h => {
+          const ind = h.querySelector('.sort-ind');
+          if (ind) ind.textContent = '';
+          h.removeAttribute('data-sort-dir');
+        });
+      }
+
+      function sortBy(th, idx){
+        const current = th.getAttribute('data-sort-dir') || 'none';
+        clearIndicators();
+        const dir = current === 'asc' ? 'desc' : 'asc';
+        th.setAttribute('data-sort-dir', dir);
+        const ind = th.querySelector('.sort-ind');
+        if (ind) ind.textContent = dir === 'asc' ? '▲' : '▼';
+
+        const type = th.getAttribute('data-type') || 'text';
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((r1,r2) => {
+          const v1 = getCellValue(r1, idx);
+          const v2 = getCellValue(r2, idx);
+          const cmp = compare(v1, v2, type);
+          return dir === 'asc' ? cmp : -cmp;
+        });
+        rows.forEach(r => tbody.appendChild(r));
+      }
+
+      // Reset sort button
+      document.getElementById('resetSort').addEventListener('click', () => {
+        clearIndicators();
+        // no stable original order tracking here; just remove sort indicators.
+      });
+
     })();
+
+    // --- Toggle compact mode (adds small class to body) ---
+    (function toggleCompact(){
+      const btn = document.getElementById('toggleCompact');
+      btn.addEventListener('click', () => {
+        document.body.classList.toggle('compact');
+        // small feedback
+        btn.style.transform = document.body.classList.contains('compact') ? 'translateY(-2px)' : '';
+        setTimeout(()=>btn.style.transform='', 220);
+      });
+    })();
+
+    // Accessibility note: ensure table is keyboard-sortable via Enter/Space on headers (handled above).
   </script>
 </body>
 </html>
